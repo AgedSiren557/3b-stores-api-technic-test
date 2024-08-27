@@ -1,0 +1,276 @@
+swagger: "2.0"
+info:
+  version: "0.0.1"
+  title: Api of 3B Stores technic test
+  description: |-
+        Api of 3B Stores technic test
+
+host: 127.0.0.1:5000
+
+schemes:
+  - https
+produces:
+  - application/json
+
+paths:
+  /api/products:
+    post:
+      description: Create a product to the database.
+      summary: Create a product to the database.
+      tags:
+        - Products
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        
+        - name: body
+          in: body
+          description: Input parameters.
+          schema:
+            $ref: "#/definitions/productsRequest"
+
+      responses:
+        201:
+          description: Created.
+          schema:
+            $ref: "#/definitions/responseGeneral"
+
+        400:
+          description: Bad Request.
+          schema:
+            $ref: "#/definitions/Error400"
+          examples:
+            application/json: |-
+              {
+                "error": "Invalid sku"
+              }
+
+  /api/inventories/product/<id_product>:
+    post:
+      description:  Add stock to a product.
+      summary: Add stock to a product.
+      tags:
+        - Products
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: body
+          in: body
+          description: Input Parameters.
+          schema:
+            $ref: "#/definitions/inventoryRequest"
+
+      responses:
+        200:
+          description: Ok.
+          schema:
+            $ref: "#/definitions/responseGeneral"
+
+        204:
+          description: No Content.
+          headers:
+            x-status-messaage:
+              type: string
+              description: |-
+                Detail of the message. 
+                e.g.: 
+                `Sku doesnt exist`
+        400:
+          description: Bad Request.
+          schema:
+            $ref: "#/definitions/Error400"
+          examples:
+            application/json: |-
+              {
+                "error": "Invalid sku"
+              }
+
+  /api/orders:
+    post:
+      description: Create an order on the database.
+      summary: Create an order on the database.
+      tags:
+        - Orders
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: body
+          in: body
+          description: Input Parameters.
+          schema:
+            $ref: "#/definitions/ordersRequest"
+
+      responses:
+        201:
+          description: Created.
+          schema:
+            $ref: "#/definitions/responseGeneral"
+
+        204:
+          description: No Content.
+          headers:
+            x-status-messaage:
+              type: string
+              description: |-
+                Detail of the message. 
+                e.g.: 
+                `Sku doesnt exist`
+            
+        400:
+          description: Bad Request.
+          schema:
+            $ref: "#/definitions/Error400"
+          examples:
+            application/json: |-
+              {
+                "error": "Invalid sku"
+              }
+
+definitions:
+  ordersRequest:
+    type: object
+    required:
+      - order_id
+      - products
+    properties:
+      order_id:
+        type: string
+        description: |-
+          Unique identifier for the order.
+        example: "66ce20b8cd8f89c1cf7b87d1"
+      products:
+        type: array
+        items:
+          type: object
+          required:
+            - sku
+            - quantity
+          properties:
+            sku:
+              type: string
+              description: |-
+                Unique sku of the product. Format four triplets separated by dashes.
+              example: "ice-foo-coo-gal"
+            quantity:
+              type: integer
+              description: |-
+                Quantity to add to the order
+              example: 5
+
+  productsRequest:
+    type: object
+    required:
+      - name
+      - sku
+    properties:
+      name:
+        type: string
+        description: |-
+          Name of the product.
+        example: "Frozen Pizza"
+      sku:
+        type: string
+        description: |-
+          Unique sku of the product. Format four triplets separated by dashes.
+        example: "ice-foo-coo-gal"
+      price:
+        type: string
+        description: |-
+          Token generado al iniciar sesión.
+          `Importante`: Cifre el valor de este campo con la llave simétrica (accesoSimetrico) con el cifrado AES/GCM/NoPadding encoding UTF-8 y un código de autenticación (codigoAutentificacionHash) que permitira asegurar la integridad de los datos y la autentificación del mensaje, que se obtienen del api de seguridad.
+        example: "14.99"
+
+  inventoryRequest:
+    type: object
+    required:
+      - stock
+    properties:
+      stock:
+        type: integer
+        description: |-
+          Products to add to the stock.
+        example: 5
+
+
+  Error400:
+    type: object
+    properties:
+      error:
+        type: string
+        description: Message error.
+        example: "Invalid sku"
+      
+
+  responseGeneral:
+    type: object
+    required:
+      - mensaje
+      - folio
+    properties:
+      message:
+        type: string
+        description: Message of the operation.
+        example: "Succesfull Operation"
+
+  summary:
+    type: object
+    properties:
+      api-name:
+        type: string
+        description: Api of 3B Stores technic test
+        example: "Pagos-Multimonedas-Operaciones-Cuentas"
+      busquedas-post:
+        type: object
+        properties:
+          displayName:
+            type: string
+            description: Obtiene la información sobre todas las cuentas de una moneda específica, incluyendo el monto de cada una y el monto total entre estas.
+            example: "Obtiene la información sobre todas las cuentas de una moneda específica, incluyendo el monto de cada una y el monto total entre estas."
+      movimientos-busquedas-post:
+        type: object
+        properties:
+          displayName:
+            type: string
+            description: Muestra el listado de todos los movimientos que ha realizado el usuario con su cuenta de multimonedas.
+            example: "/movimientos/busquedas"
+      remesas-busquedas-post:
+        type: object
+        properties:
+          displayName:
+            type: string
+            description: Obtiene información de del pago de una remesa.
+            example: "/remesas/busquedas"
+      intercambios-post:
+        type: object
+        properties:
+          displayName:
+            type: string
+            description: Realiza un intercambio de divisas.
+            example: "/intercambios"
+      redenciones-post:
+        type: object
+        properties:
+          displayName:
+            type: string
+            description: Redime el pago de una remesa por el canal digital.
+            example: "/redenciones"
+      confirmaciones-post:
+        type: object
+        properties:
+          displayName:
+            type: string
+            description: Confirma el pago de una remesa por el canal digital.
+            example: "/confirmaciones"
+      traspasos-post:
+        type: object
+        properties:
+          displayName:
+            type: string
+            description: Recurso para realizar traspasos internos en pesos mexicanos.
+            example: "/traspasos"
