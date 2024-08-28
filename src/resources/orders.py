@@ -39,8 +39,8 @@ class Orders(Resource):
           second= order_products.sub_total
         )
         
+        #* substract stock from products and update
         product_model.stock -= order_products.quantity
-        
         db_service.update(
           table="products",
           data={ "stock": product_model.stock},
@@ -97,11 +97,26 @@ class Orders(Resource):
   
   
   def __validate_price__(product:ProductsModel, order_product: OrderProduct):
+    """
+    Valiadte that the product have a price and calculate subtotal
+    Args:
+      :param product: Pydantic product model
+      :param order_product (list): Pydantic order_product model
+    Returns:
+      None
+    """
     if product.price is None:
-      raise ItemWithOutPriceException(f"Item with sku: {product.sku} has naot price in db")
+      raise ItemWithOutPriceException(f"Item with sku: {product.sku} has not price in db")
     order_product.sub_total = str(float(product.price) * order_product.quantity)
-    print (order_product.sub_total)
   
   def __add_number_strings__(first: str, second:str)-> str:
+    """
+    Make the addition operation of two string numbers
+    Args:
+      :param first: stringNumber to make a addition
+      :param second: stringNumber to make a addition
+    Returns:
+      :param str: string of the calculated number
+    """
     return str(float(first)+float(second))
   

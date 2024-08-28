@@ -1,0 +1,93 @@
+{
+	"info": {
+		"_postman_id": "d77d1734-19f4-4102-8958-8c9a0b8ef320",
+		"name": "3B-prueba tecnica",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "23024460"
+	},
+	"item": [
+		{
+			"name": "Products",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"sku\": \"ice-foo-coo-gal\",\r\n    \"name\": \"Ice cream flavour cookies and cream\",\r\n    \"price\":\"14.99\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "{{LOCAL}}/api/products"
+			},
+			"response": []
+		},
+		{
+			"name": "inventories",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"stock\": 100\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "{{LOCAL}}/api/inventories/product/1"
+			},
+			"response": []
+		},
+		{
+			"name": "Orders",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"order_id\": \"66ce2cc01daf31b3d345c3b5\",\r\n    \"products\":[\r\n        {\r\n            \"sku\": \"ice-foo-coo-gal\",\r\n            \"quantity\": 5\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "{{LOCAL}}/api/orders"
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "LOCAL",
+			"value": "http://127.0.0.1:5000",
+			"type": "string"
+		}
+	]
+}

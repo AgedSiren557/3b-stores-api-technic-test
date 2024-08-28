@@ -20,10 +20,10 @@ def test_inventories_invalid_stock(client):
   assert response.json.get('error') == "'a' is not of type 'integer'"
   
 def test_inventories_invalid_id(client):
-  data = {"stock": "a"}
-  response = client.patch('/api/inventories/product/1',json=data)
+  data = {"stock": 5}
+  response = client.patch('/api/inventories/product/a',json=data)
   assert response.status_code == 400
-  assert response.json.get('error') == "'a' is not of type 'integer'"
+  assert response.json.get('error') == "<id_product> param must be a valid id"
   
 def test_inventories_not_stock(client):
   data = {}

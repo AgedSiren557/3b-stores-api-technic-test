@@ -13,11 +13,14 @@ class Inventories(Resource):
   @classmethod
   @validate_request(schema = inventories_schema)
   def patch(cls, id_product:str, *args, **kwargs):
+    #* validate id_product
     if not id_product.isdigit() :
       return Response(json.dumps({"error":"<id_product> param must be a valid id"}), mimetype="application/json", status=400)
     
     new_stock = request.get_json()["stock"]
+    
     try:
+      #* search the product
       db_service = DataBaseService(db_name=os.getenv("DB_CONNECTION"))
       products = db_service.select(
         table= "products", 
@@ -26,6 +29,7 @@ class Inventories(Resource):
       if len(products) == 0:
         raise NotItemInInDatabaseException()
       
+      #* Update product
       data = ProductsModel(**products[0])
       data.stock += new_stock
       db_service.update(
